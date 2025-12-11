@@ -35,22 +35,36 @@ def calc_network_address(ip, mask):
     splitted_ip = ip.split('.')
     splitted_mask = mask.split('.')
 
-    network_address = [str( int( splitted_ip[octet] ) & int(splitted_mask[octet] ) ) + '.' for octet in range(4)]
+    network_address = [str(int(splitted_ip[octet]) & int(splitted_mask[octet])) + '.' for octet in range(4)]
 
     return ''.join(network_address)[:-1]
-# print(calc_network_address('192.168.10.5', '255.255.0.0'))
 
 
 
 
 def calc_broadcast_address(network : str, hosts_num : int, mask : str):
-    pass
+    # bin_mask = '.'.join(str(bin(int(i))) for i in mask.split('.'))
+    # inverted_mask = ''.join(['0' if i == '1' else '1' for i in ''.join(network.split('.'))])
+    # splitted_mask = inverted_mask.split('.')
+
+    # broadcast = [str(int(splitted_mask[octet]) | int(splitted_mask[octet])) + '.' for octet in range(4)]
+    return network
+
 
 
 def calc_hosts_number(cidr):
     return 2 ** (32 - cidr) - 2
 
 
+def detect_cidr(mask : str):
+    cdir = 0
+    splitted_mask = mask.split('.')
+    for i, octet in enumerate(splitted_mask):
+        if octet != '255':
+            cdir += i * 8
+            cdir += str(bin(int(octet))).count('1')
+            break
+    return cdir
 
 
 def detect_class_kind(mask):
@@ -80,7 +94,7 @@ Subnet Mask: {mask}
 Network Address: {network_address}
 Broadcast Address: {broadcast_address}
 Number of Hosts in this subnet: {hosts_number}
-CIDR Mask: {cidr}
+CIDR Mask: /{cidr}
 """
     return result
 

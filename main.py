@@ -1,5 +1,7 @@
 import core.utils as ut
 
+my_id = 325159390
+
 
 def main():
     while True:
